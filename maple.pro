@@ -3,7 +3,7 @@ QT += widgets serialport
 TARGET = maple
 TEMPLATE = app
 
-CONFIG += C++11
+CONFIG += c++11
 CONFIG += qtquickcompiler
 QMAKE_DISTCLEAN += .qtquickcompiler/*
 QMAKE_DISTCLEAN += *_qtquickcompiler.qrc
@@ -16,12 +16,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     settingsdialog.cpp \
-    console.cpp
+    console.cpp \
+    syntaxhighlighter.cpp
 
 HEADERS += \
     mainwindow.h \
     settingsdialog.h \
-    console.h
+    console.h \
+    syntaxhighlighter.h
 
 FORMS += \
     mainwindow.ui \

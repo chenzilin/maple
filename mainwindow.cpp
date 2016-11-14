@@ -1,20 +1,23 @@
 #include <QLabel>
+#include <QDebug>
 #include <QMessageBox>
-#include <QtSerialPort/QSerialPort>
+#include <QSerialPort>
 
-#include "console.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#include "console.h"
 #include "settingsdialog.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
+
     console = new Console;
-    console->setEnabled(false);
-    setCentralWidget(console);
+    console->setEnabled(true);
+    this->setCentralWidget(console);
 
     serial = new QSerialPort(this);
     settings = new SettingsDialog;
@@ -75,7 +78,6 @@ void MainWindow::openSerialPort()
     serial->setFlowControl(p.flowControl);
     if (serial->open(QIODevice::ReadWrite)) {
         console->setEnabled(true);
-        console->setLocalEchoEnabled(p.localEchoEnabled);
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
         ui->actionConfigure->setEnabled(false);
@@ -114,6 +116,8 @@ void MainWindow::readData()
 {
     QByteArray data = serial->readAll();
     console->putData(data);
+
+//    qWarning() << "QSerialPort readData: " << data;
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)

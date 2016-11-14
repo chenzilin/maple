@@ -1,29 +1,53 @@
-#include <QRegExp>
+#include <QTime>
+#include <QDebug>
+#include <QPalette>
 #include <QDateTime>
-#include <QScrollBar>
-#include <QtCore/QDebug>
+#include <QTextDocument>
 
 #include "console.h"
 
 Console::Console(QWidget *parent)
     : QPlainTextEdit(parent)
-    , localEchoEnabled(false), m_echoTimeType(0),m_startTime()
 {
-    document()->setMaximumBlockCount(100);
     QPalette p = palette();
     p.setColor(QPalette::Base, Qt::black);
     p.setColor(QPalette::Text, Qt::white);
-    setPalette(p);
+    this->setPalette(p);
+
+    m_syntaxHighLighter = new SyntaxHighLighter(this->document());
+
+    this->setTabStopWidth(40);
+    this->setUndoRedoEnabled(true);
 }
 
-void Console::setEchoTimeType(int echoTimeType)
+void Console::keyPressEvent(QKeyEvent *e)
 {
-    if (echoTimeType != m_echoTimeType) {
-        m_echoTimeType = echoTimeType;
+    switch (e->key()) {
+    case Qt::Key_Backspace: {
+        if (m_cmdBuffer.size() != 0)
+            m_cmdBuffer.remove(m_cmdBuffer.size()-1, 1);
 
-        if (2 == echoTimeType) {
-            m_startTime = QTime::currentTime();
+        QString tmp = this->toPlainText();
+        tmp.remove(tmp.size()-1, 1);
+        this->clear();
+        this->setPlainText(tmp);
+        this->moveCursor(QTextCursor::End);
         }
+        break;
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+        break;
+    default:
+        QPlainTextEdit::keyPressEvent(e);
+
+        m_cmdBuffer += e->text();
+        if (e->text() == QString::fromLatin1("\r")) {
+            emit getData(m_cmdBuffer.toLocal8Bit());
+            m_cmdBuffer.clear();
+        }
+        break;
     }
 }
 
@@ -57,44 +81,15 @@ void Console::putData(const QByteArray &data)
 
 lable_end:
     insertPlainText(inputDate);
-
-    QScrollBar *bar = verticalScrollBar();
-    bar->setValue(bar->maximum());
 }
 
-void Console::setLocalEchoEnabled(bool set)
+void Console::setEchoTimeType(int echoTimeType)
 {
-    localEchoEnabled = set;
-}
+    if (echoTimeType != m_echoTimeType) {
+        m_echoTimeType = echoTimeType;
 
-void Console::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-    case Qt::Key_Backspace:
-    case Qt::Key_Left:
-    case Qt::Key_Right:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-        break;
-    default:
-        if (localEchoEnabled)
-            QPlainTextEdit::keyPressEvent(e);
-        emit getData(e->text().toLocal8Bit());
+        if (2 == echoTimeType) {
+            m_startTime = QTime::currentTime();
+        }
     }
-}
-
-void Console::mousePressEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e)
-    setFocus();
-}
-
-void Console::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e)
-}
-
-void Console::contextMenuEvent(QContextMenuEvent *e)
-{
-    Q_UNUSED(e)
 }

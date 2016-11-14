@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QtGlobal>
+#include <QSerialPort>
 #include <QMainWindow>
-#include <QtCore/QtGlobal>
-#include <QtSerialPort/QSerialPort>
 
 QT_BEGIN_NAMESPACE
 
