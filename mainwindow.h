@@ -29,7 +29,7 @@ private slots:
     void openSerialPort();
     void closeSerialPort();
     void about();
-    void writeData(const QByteArray &data);
+    void writeData(const QByteArray data);
     void readData();
 
     void handleError(QSerialPort::SerialPortError error);
@@ -43,8 +43,8 @@ private:
     void showStatusMessage(const QString &message);
 
     Ui::MainWindow *ui;
-    QLabel *status;
-    Console *console;
-    SettingsDialog *settings;
-    QSerialPort *serial;
+    QLabel *m_status;
+    Console *m_console;
+    SettingsDialog *m_settings;
+    QSerialPort *m_serial;
 };

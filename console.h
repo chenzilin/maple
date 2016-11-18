@@ -14,11 +14,11 @@ class Console : public QPlainTextEdit
 public:
     Console(QWidget *parent = 0);
 
-    void putData(const QByteArray &data);
+    void appendText(const QByteArray data);
     void setEchoTimeType(int echoTimeType);
 
 signals:
-    void getData(const QByteArray &data);
+    void sendData(const QByteArray data);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
@@ -27,7 +27,7 @@ private:
     int m_echoTimeType = 0;
     QTime m_startTime;
 
-    QString m_cmdBuffer = QString::fromLatin1("");
+    QByteArray m_cmdBuffer = QByteArray("");
 
     SyntaxHighLighter *m_syntaxHighLighter = 0;
 };

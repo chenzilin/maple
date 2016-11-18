@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QPalette>
 #include <QDateTime>
+#include <QApplication>
 #include <QTextDocument>
 
 #include "console.h"
@@ -18,21 +19,23 @@ Console::Console(QWidget *parent)
 
     this->setTabStopWidth(40);
     this->setUndoRedoEnabled(true);
+    this->setMaximumBlockCount(10000);
 }
 
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace: {
-        if (m_cmdBuffer.size() != 0)
+        if (m_cmdBuffer.size() != 0) {
             m_cmdBuffer.remove(m_cmdBuffer.size()-1, 1);
 
-        QString tmp = this->toPlainText();
-        tmp.remove(tmp.size()-1, 1);
-        this->clear();
-        this->setPlainText(tmp);
-        this->moveCursor(QTextCursor::End);
+            QString tmp = this->toPlainText();
+            tmp.remove(tmp.size()-1, 1);
+            this->clear();
+            this->setPlainText(tmp);
+            this->moveCursor(QTextCursor::End);
         }
+    }
         break;
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -44,15 +47,18 @@ void Console::keyPressEvent(QKeyEvent *e)
 
         m_cmdBuffer += e->text();
         if (e->text() == QString::fromLatin1("\r")) {
-            emit getData(m_cmdBuffer.toLocal8Bit());
+            this->sendData(m_cmdBuffer);
+            qDebug() << "sendData: " << m_cmdBuffer;
             m_cmdBuffer.clear();
         }
         break;
     }
 }
 
-void Console::putData(const QByteArray &data)
+void Console::appendText(const QByteArray data)
 {
+    qDebug() << "getData: " << data;
+
     QTime time(0,0,0);
     QString echoTime;
     int index = 0;
@@ -81,6 +87,7 @@ void Console::putData(const QByteArray &data)
 
 lable_end:
     insertPlainText(inputDate);
+    QApplication::processEvents();
 }
 
 void Console::setEchoTimeType(int echoTimeType)

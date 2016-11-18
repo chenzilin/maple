@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Maple, SerialPort Tool</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="maple.qrc">
+    <normaloff>:/images/logo.ico</normaloff>:/images/logo.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
