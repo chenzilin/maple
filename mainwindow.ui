@@ -35,14 +35,6 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuCalls">
-    <property name="title">
-     <string>Calls(&amp;C)</string>
-    </property>
-    <addaction name="actionConnect"/>
-    <addaction name="actionDisconnect"/>
-    <addaction name="separator"/>
-   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help(&amp;H)</string>
@@ -54,13 +46,6 @@
      <string>File(&amp;F)</string>
     </property>
     <addaction name="actionQuit"/>
-   </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit(&amp;E)</string>
-    </property>
-    <addaction name="actionConfigure"/>
-    <addaction name="actionClear"/>
    </widget>
    <widget class="QMenu" name="menuLog">
     <property name="title">
@@ -75,10 +60,8 @@
     <addaction name="actionLocalTime"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuCalls"/>
-   <addaction name="menuLog"/>
    <addaction name="menuTime_T"/>
+   <addaction name="menuLog"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -92,6 +75,8 @@
    <addaction name="actionDisconnect"/>
    <addaction name="actionConfigure"/>
    <addaction name="actionClear"/>
+   <addaction name="separator"/>
+   <addaction name="actionQuit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAbout">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QTime>
+#include <QAction>
 #include <QString>
 #include <QKeyEvent>
 #include <QPlainTextEdit>
@@ -23,6 +24,10 @@ signals:
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
 
+private slots:
+    void doPaste();
+
+
 private:
     int m_echoTimeType = 0;
     QTime m_startTime;
@@ -30,4 +35,7 @@ private:
     QByteArray m_cmdBuffer = QByteArray("");
 
     SyntaxHighLighter *m_syntaxHighLighter = 0;
+
+    QAction* m_copyAct;
+    QAction* m_pasteAct;
 };
