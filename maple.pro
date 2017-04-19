@@ -16,14 +16,12 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     settingsdialog.cpp \
-    console.cpp \
-    syntaxhighlighter.cpp
+    console.cpp
 
 HEADERS += \
     mainwindow.h \
     settingsdialog.h \
-    console.h \
-    syntaxhighlighter.h
+    console.h
 
 FORMS += \
     mainwindow.ui \
@@ -37,4 +35,3 @@ UI_DIR = build
 MOC_DIR = build
 RCC_DIR = build
 OBJECTS_DIR = build
-QMAKE_POST_LINK += $(STRIP) $(TARGET)

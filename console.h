@@ -6,8 +6,6 @@
 #include <QKeyEvent>
 #include <QPlainTextEdit>
 
-#include "syntaxhighlighter.h"
-
 class Console : public QPlainTextEdit
 {
     Q_OBJECT
@@ -27,14 +25,11 @@ protected:
 private slots:
     void doPaste();
 
-
 private:
     int m_echoTimeType = 0;
     QTime m_startTime;
 
     QByteArray m_cmdBuffer = QByteArray("");
-
-    SyntaxHighLighter *m_syntaxHighLighter = 0;
 
     QAction* m_copyAct;
     QAction* m_pasteAct;

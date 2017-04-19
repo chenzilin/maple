@@ -13,7 +13,7 @@ Console::Console(QWidget *parent)
 {
     QPalette p = palette();
     p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::white);
+    p.setColor(QPalette::Text, Qt::lightGray);
     this->setPalette(p);
 
     QTextDocument *doc = this->document();
@@ -22,11 +22,10 @@ Console::Console(QWidget *parent)
     font.setFamily("Monospace");
     doc->setDefaultFont(font);
 
-    m_syntaxHighLighter = new SyntaxHighLighter(this->document());
-
     this->setTabStopWidth(40);
     this->setMaximumBlockCount(10000);
     this->setContextMenuPolicy(Qt::ActionsContextMenu);
+    this->setCursorWidth(8);
 
     m_copyAct = new QAction(tr("&Copy"), this);
     m_copyAct->setEnabled(true);
