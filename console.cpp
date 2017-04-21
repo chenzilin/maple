@@ -1,10 +1,12 @@
 #include <QTime>
 #include <QDebug>
+#include <QRegExp>
 #include <QPalette>
 #include <QDateTime>
 #include <QClipboard>
 #include <QApplication>
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include "console.h"
 
@@ -53,19 +55,39 @@ void Console::doPaste()
     m_cmdBuffer += clipboard->text();
 }
 
+void Console::processContextColor()
+{
+    m_originContext.replace(QRegExp("\u001B\\[1;30m"), "<font color = #000000>");
+    m_originContext.replace(QRegExp("\u001B\\[1;31m"), "<font color = #FF0000>");
+    m_originContext.replace(QRegExp("\u001B\\[1;32m"), "<font color = #00BB00>");
+    m_originContext.replace(QRegExp("\u001B\\[1;33m"), "<font color = #FFFF37>");
+    m_originContext.replace(QRegExp("\u001B\\[1;34m"), "<font color = #2828FF>");
+    m_originContext.replace(QRegExp("\u001B\\[1;35m"), "<font color = #8600FF>");
+    m_originContext.replace(QRegExp("\u001B\\[1;36m"), "<font color = #8600FF>");
+    m_originContext.replace(QRegExp("\u001B\\[1;37m"), "<font color = #FFFFFF>");
+
+    m_originContext.replace(QRegExp("\u001B\\[0m"), "</font>");
+
+    m_originContext.replace(QRegExp("[\\r|\\n]+"), "<br/>");
+
+    this->clear();
+    this->appendHtml(m_originContext);
+    this->moveCursor(QTextCursor::End);
+}
+
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace: {
         if (m_cmdBuffer.size() != 0) {
             m_cmdBuffer.remove(m_cmdBuffer.size()-1, 1);
-
-            QString tmp = this->toPlainText();
-            tmp.remove(tmp.size()-1, 1);
+            m_originContext.remove(m_originContext.size()-1, 1);    // 把存在origincontext内部的命令行也删掉
             this->clear();
-            this->setPlainText(tmp);
+            this->appendHtml(m_originContext);
             this->moveCursor(QTextCursor::End);
+
         }
+
     }
         break;
     case Qt::Key_Left:
@@ -75,13 +97,12 @@ void Console::keyPressEvent(QKeyEvent *e)
         break;
     default:
         QPlainTextEdit::keyPressEvent(e);
-
         m_cmdBuffer += e->text();
+        m_originContext += e->text();
+        processContextColor();
         if (e->text() == QString::fromLatin1("\r")) {
             this->sendData(m_cmdBuffer);
-            qDebug() << "sendData: " << m_cmdBuffer;
-
-            if (m_cmdBuffer == "clear\r") this->clear();
+            if (m_cmdBuffer == "clear\r") m_originContext.clear();
             m_cmdBuffer.clear();
         }
         break;
@@ -90,8 +111,6 @@ void Console::keyPressEvent(QKeyEvent *e)
 
 void Console::appendText(const QByteArray data)
 {
-    qDebug() << "getData: " << data;
-
     QTime time(0,0,0);
     QString echoTime;
     int index = 0;
@@ -119,7 +138,9 @@ void Console::appendText(const QByteArray data)
     }
 
 lable_end:
-    insertPlainText(inputDate);
+
+    m_originContext += inputDate;
+    processContextColor();
     QApplication::processEvents();
 }
 

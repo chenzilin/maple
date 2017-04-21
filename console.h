@@ -33,4 +33,8 @@ private:
 
     QAction* m_copyAct;
     QAction* m_pasteAct;
+
+
+    void processContextColor();
+    QString m_originContext = "";
 };

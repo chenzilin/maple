@@ -115,8 +115,7 @@ void MainWindow::writeData(const QByteArray data)
 
 void MainWindow::readData()
 {
-    QByteArray data = m_serial->readAll();
-    m_console->appendText(data);
+    m_console->appendText(m_serial->readAll());
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
