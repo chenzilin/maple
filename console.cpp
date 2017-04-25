@@ -57,16 +57,20 @@ void Console::doPaste()
 
 void Console::processContextColor()
 {
-    m_originContext.replace(QRegExp("\u001B\\[1;30m"), "<font color = #000000>");
-    m_originContext.replace(QRegExp("\u001B\\[1;31m"), "<font color = #FF0000>");
-    m_originContext.replace(QRegExp("\u001B\\[1;32m"), "<font color = #00BB00>");
-    m_originContext.replace(QRegExp("\u001B\\[1;33m"), "<font color = #FFFF37>");
-    m_originContext.replace(QRegExp("\u001B\\[1;34m"), "<font color = #2828FF>");
-    m_originContext.replace(QRegExp("\u001B\\[1;35m"), "<font color = #8600FF>");
-    m_originContext.replace(QRegExp("\u001B\\[1;36m"), "<font color = #8600FF>");
-    m_originContext.replace(QRegExp("\u001B\\[1;37m"), "<font color = #FFFFFF>");
+    m_originContext.replace(QRegExp("\u001B\\[1;30m"), "<font color = #4F4F4F>");   // 灰黑
+    m_originContext.replace(QRegExp("\u001B\\[1;31m"), "<font color = #FF0000>");   // 红色
+    m_originContext.replace(QRegExp("\u001B\\[1;32m"), "<font color = #8CEA00>");   // 绿色
+    m_originContext.replace(QRegExp("\u001B\\[1;33m"), "<font color = #FFFF37>");   // 黄色
+    m_originContext.replace(QRegExp("\u001B\\[1;34m"), "<font color = #00CACA>");   // 灰蓝色
+    m_originContext.replace(QRegExp("\u001B\\[1;35m"), "<font color = #FF00FF>");   // 紫红色
+    m_originContext.replace(QRegExp("\u001B\\[1;36m"), "<font color = #00FFFF>");   // 天蓝色
+    m_originContext.replace(QRegExp("\u001B\\[1;37m"), "<font color = #FFFFFF>");   // 白色
 
-    m_originContext.replace(QRegExp("\u001B\\[0m"), "</font>");
+    // 0代表关闭高亮颜色略微黑一点，0;0测试后发现就是白色
+    m_originContext.replace(QRegExp("\u001B\\[0;35m"), "<font color = #750075>");   // 深紫色
+    m_originContext.replace(QRegExp("\u001B\\[0;0m"), "<font color = #9D9D9D>");    // 灰色
+
+    m_originContext.replace(QRegExp("\\[0m"), "</font>");
 
     m_originContext.replace(QRegExp("[\\r|\\n]+"), "<br/>");
 
