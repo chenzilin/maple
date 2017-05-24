@@ -16,6 +16,8 @@ public:
     void appendText(const QByteArray data);
     void setEchoTimeType(int echoTimeType);
 
+    void setLocalEchoEnabled(bool set);
+
 signals:
     void sendData(const QByteArray data);
 
@@ -37,4 +39,6 @@ private:
 
     void processContextColor();
     QString m_originContext = "";
+
+    bool m_localEchoEnabled;
 };

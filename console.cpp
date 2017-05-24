@@ -11,7 +11,7 @@
 #include "console.h"
 
 Console::Console(QWidget *parent)
-    : QPlainTextEdit(parent)
+    : QPlainTextEdit(parent), m_localEchoEnabled(false)
 {
     QPalette p = palette();
     p.setColor(QPalette::Base, Qt::black);
@@ -79,6 +79,11 @@ void Console::processContextColor()
     this->moveCursor(QTextCursor::End);
 }
 
+void Console::setLocalEchoEnabled(bool set)
+{
+    m_localEchoEnabled = set;
+}
+
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
@@ -106,7 +111,12 @@ void Console::keyPressEvent(QKeyEvent *e)
         processContextColor();
         if (e->text() == QString::fromLatin1("\r")) {
             this->sendData(m_cmdBuffer);
-            if (m_cmdBuffer == "clear\r") m_originContext.clear();
+            if (m_cmdBuffer == "clear\r") {
+                m_originContext.clear();
+            }
+            else {
+                if (!m_localEchoEnabled) m_originContext.chop(m_cmdBuffer.length());
+            }
             m_cmdBuffer.clear();
         }
         break;
